@@ -71,6 +71,7 @@ jobs:
       - name: Copy docker-compose.yml
         run: |
           scp docker-compose.yml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ec2-user/webapp
+          scp -r nginx ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ec2-user/webapp/nginx
           
       - name: Deploy on EC2
         env:
