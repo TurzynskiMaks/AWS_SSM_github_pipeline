@@ -1,0 +1,7 @@
+services:
+  web:
+    image: ${WEB_APP_IMAGE}
+    ports:
+      - "80:80"
+    env_file:
+      - .env
