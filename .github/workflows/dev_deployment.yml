@@ -62,10 +62,11 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-      - name: Disable strict host key checking
+      - name: Add EC2 host key to known_hosts
         run: |
           mkdir -p ~/.ssh
-          printf "Host *\n StrictHostKeyChecking no\n >> ~/.ssh/config
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
 
       - name: Copy docker-compose.yml
         run: |
