@@ -76,7 +76,7 @@ jobs:
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         run: |
-          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} bash -se << 'E0F'
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} bash -se << E0F
           set -euo pipefail
     
           cd webapp
