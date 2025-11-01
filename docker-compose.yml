@@ -1,13 +1,15 @@
 services:
   test:
     image: ${DOCKERHUB_USERNAME}/test:latest
-    ports:
-      - "5000:5000"
+    expose:
+      - "5000"
+    restart: unless-stopped
 
   test2:
     image: ${DOCKERHUB_USERNAME}/test2:latest
-    ports:
-      - "5001:5001"
+    expose:
+      - "5001"
+    restart: unless-stopped
 
   nginx:
     image: nginx:1.27-alpine
