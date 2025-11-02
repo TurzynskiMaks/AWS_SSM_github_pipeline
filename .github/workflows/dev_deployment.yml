@@ -3,9 +3,6 @@ name: Build all Dockerfiles & SSH deploy
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-  	types:
-  		- closed
 
 permissions:
   contents: read
