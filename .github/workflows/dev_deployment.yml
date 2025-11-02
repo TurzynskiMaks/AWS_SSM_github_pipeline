@@ -3,6 +3,9 @@ name: Build all Dockerfiles & SSH deploy
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+  	types:
+  		- closed
 
 permissions:
   contents: read
@@ -18,38 +21,13 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Find, build and push every Dockerfile with tag :latest
+      - name: Using python script, log in into dockerhub and push images into repo
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         shell: bash
-        run: |
-          set -euo pipefail
-
-          mapfile -t DOCKER_DIRS < <(find . -type f -name Dockerfile -printf '%h\n' | sort -u)
-
-          if [ ${DOCKER_DIRS[@]} eq - ]; then
-            echo "No Dockerfiles in repo." >&2
-            exit 1
-          fi
-
-          echo "Found Dockerfiles:"
-          printf ' - %s\n' "${DOCKER_DIRS[@]}"
-
-          for dir in "${DOCKER_DIRS[@]}"; do
-            name="$(basename "$dir")"
-
-            image="${DOCKERHUB_ORG}/${name}:latest"
-
-            echo "::group::Build $ push ${image}"
-            echo "Building from: ${dir}"
-            docker build -t "${image}" "${dir}"
-            docker push "${image}"
-            echo "::endgroup::"
-          done
+        run:
+         ./build_push
   deploy_via_ssh:
     needs: build_and_push_all
     runs-on: ubuntu-latest
