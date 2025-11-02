@@ -1,4 +1,4 @@
-#How does it work?
+# How does it work?
 
 Using github actions, and prebuilt python script, on every push onto 'main branch', workflow file activate a series of events, such as:
     logging into dockerhub with credentials stored in github secrets
